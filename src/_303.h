@@ -57,10 +57,9 @@ typedef struct{
 //init procedure
 void * _303_init(char *msd)
 {
-	(void)msd;
-
 	_303_machine* m=(_303_machine*)bmx_alloc(sizeof(_303_machine));
 	_303_track *t=&m->tv[0];
+	(void)msd;
 
 	t->buf0=0;
 	t->buf1=0;
@@ -136,9 +135,8 @@ BOOL _303_work(_303_machine *m, float *psamples, int numsamples, int channels)
 	int i;
 	float in,fb;
 	int track=0;
-	(void)channels;
-
 	_303_track *t=&m->tv[track];
+	(void)channels;
 
 	if (t->freq!=0)
 	{

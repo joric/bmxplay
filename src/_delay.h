@@ -48,8 +48,8 @@ typedef struct{
 //init procedure
 void *_delay_init(char *msd)
 {
-	(void)msd;
 	_delay_machine *m=(_delay_machine*)bmx_alloc(sizeof(_delay_machine));
+	(void)msd;
 	m->buf=(float*)m->dbuf;
 	memset(m->buf,0,_delay_BUFFER*2*4);
 	m->writepos=0;

@@ -222,10 +222,9 @@ void bp_iir(T_BP * bp, float in)	// 12 dB bi-quad
 //init procedure
 void *_voice_init(char *msd)
 {
-	(void)msd;
-
 	_voice_machine *m = (_voice_machine *) bmx_alloc(sizeof(_voice_machine));
 	_voice_track *t = &m->tv[0];
+	(void)msd;
 
 	m->pos = 0;
 	t->freq = 130.815f; //C-4
@@ -264,8 +263,8 @@ void *_voice_init(char *msd)
 int _voice_tick(_voice_machine * m, _voice_gpar *gp, _voice_tpar * tp)
 {
 	int track = 0;
-	(void)gp;
 	_voice_track *t = &m->tv[0];
+	(void)gp;
 
 	if (tp->slide != 0xFF)
 	{
@@ -309,9 +308,10 @@ BOOL _voice_work(_voice_machine * m, float *psamples, int numsamples, int channe
 {
 	int i;
 	int track = 0;
-	(void)channels;
 
 	_voice_track *t = &m->tv[track];
+
+	(void)channels;
 
 	for (i = 0; i < numsamples; i++)
 	{

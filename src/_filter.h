@@ -33,7 +33,7 @@ typedef struct{
 	//(...)
 	//some useful vars for track processing
 	//(...)
-}_filter_machine;
+} _filter_machine;
 
 #pragma pack()
 
@@ -41,9 +41,8 @@ typedef struct{
 //init procedure
 void *_filter_init(const char *msd)
 {
-	(void)msd;
-
 	_filter_machine* m=(_filter_machine*)bmx_alloc(sizeof(_filter_machine));
+	(void)msd;
 
 	m->buf0=0;
 	m->buf1=0;

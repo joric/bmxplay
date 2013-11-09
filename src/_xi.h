@@ -156,9 +156,8 @@ float _xi_nextenv(_xi_machine *m)
 int _xi_tick(_xi_machine *m, _xi_gpar *gp, _xi_tpar *tp)
 {
 	int track=0;
-	(void)gp;
-
 	_xi_track *t=&m->tv[0];
+	(void)gp;
 
 	if (tp->note!=0)
 	{
@@ -178,13 +177,12 @@ BOOL _xi_work(_xi_machine *m, float *psamples, int numsamples, int channels)
 	int length,index;
 	int a1,a2,a;
 	int sndf;
-	(void)channels;
 
 	char *s=(char*)m->s.wave;
 	int type=m->s.type;
-
 	int lpstart = m->s.loopstart;
 	int lpend = (m->s.loopstart + m->s.looplength);
+	(void)channels;
 
 	t=&m->tv[track];
 	length=m->s.samplelength;
