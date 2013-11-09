@@ -4,8 +4,6 @@ project(bmxplay)
 
 set(root ${CMAKE_CURRENT_SOURCE_DIR})
 
-#include_directories(${root})
-
 macro(add_machine name type)
   add_library(${name} SHARED src/${name}.cpp src/${name}.h)
   list(APPEND ${type} ${name})
