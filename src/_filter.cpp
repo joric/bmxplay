@@ -134,7 +134,7 @@ bool mi::Work(float *psamples, int numsamples, int mode)
 {	
 	if (mode == WM_WRITE || mode == WM_NOIO || mode==WM_READ ) return false;
 
-	return _filter_work(me,psamples,numsamples,1);
+	return _filter_work(me,psamples,numsamples,1)!=0;
 }
 
 char const *mi::DescribeValue(int const param, int const value)

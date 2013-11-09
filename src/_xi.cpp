@@ -246,7 +246,7 @@ void mi::Tick()
 
 bool mi::Work(float *psamples, int numsamples, int const)
 {	
-	return _xi_work(me,psamples,numsamples,1);
+	return _xi_work(me,psamples,numsamples,1)!=0;
 }
 
 

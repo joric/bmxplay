@@ -169,7 +169,7 @@ bool mi::WorkMonoToStereo(float *pin, float *pout, int numsamples, int mode)
 	if (mode & WM_READ) memcpy(paux, pout, numsamples*8); else memset (pout,0,numsamples*8);
 
 	//processing
-	return _delay_work(me,pout,numsamples,2);
+	return _delay_work(me,pout,numsamples,2)!=0;
 }
 
 

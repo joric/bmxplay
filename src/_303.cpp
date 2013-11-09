@@ -229,7 +229,7 @@ void mi::Tick()
 
 bool mi::Work(float *psamples, int numsamples, int const)
 {	
-	return _303_work(me,psamples,numsamples,1);
+	return _303_work(me,psamples,numsamples,1)!=0;
 }
 
 char const *mi::DescribeValue(int const param, int const value)
