@@ -32,6 +32,11 @@ int nextbuf;
 
 static void CALLBACK bufferdone(HWAVEOUT hwo, UINT uMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
 {
+	(void)hwo;
+	(void)dwInstance;
+	(void)dwParam1;
+	(void)dwParam2;
+
 	if (uMsg == WOM_DONE)
 	{
 		SetEvent(musicevent);

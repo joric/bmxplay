@@ -44,8 +44,8 @@ int main(int argc, char **argv)
     char *szName;
     FILE *fp;
     long file_length;
-	char * data;
-	int res;
+    char * data;
+    int res;
 
     printf("Bmxplay version %s\n", BMXPLAY_VERSION);
 
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 
     while (!_kbhit())
     {
-        printf ("Playing %s (%04d/%04d)\r", szName, BmxCurrentTick, bmx.seq.songsize);
+        printf ("Playing %s (%04d/%04d)\r", szName, BmxCurrentTick, (int)bmx.seq.songsize);
         Sleep(10);
     }
 

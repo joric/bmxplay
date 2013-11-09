@@ -33,13 +33,16 @@ float BmxGetVolume()
 	HMIXER hMixer;
 	result = mixerOpen(&hMixer, MIXER_OBJECTF_MIXER, 0, 0, 0);
 
-	MIXERLINE ml = { 0 };
-	ml.cbStruct = sizeof(MIXERLINE);
+	MIXERLINE ml;
+	memset(&ml, 0, sizeof(ml));
+	ml.cbStruct = sizeof(ml);
 	ml.dwComponentType = MIXERLINE_COMPONENTTYPE_DST_SPEAKERS;
 	result = mixerGetLineInfo((HMIXEROBJ) hMixer, &ml, MIXER_GETLINEINFOF_COMPONENTTYPE);
 
-	MIXERLINECONTROLS mlc = { 0 };
-	MIXERCONTROL mc = { 0 };
+	MIXERLINECONTROLS mlc;
+	memset(&mlc,0,sizeof(mlc));
+	MIXERCONTROL mc;
+	memset(&mc,0,sizeof(mc));
 	mlc.cbStruct = sizeof(MIXERLINECONTROLS);
 	mlc.dwLineID = ml.dwLineID;
 	mlc.dwControlType = MIXERCONTROL_CONTROLTYPE_VOLUME;
@@ -48,8 +51,10 @@ float BmxGetVolume()
 	mlc.cbmxctrl = sizeof(MIXERCONTROL);
 	result = mixerGetLineControls((HMIXEROBJ) hMixer, &mlc, MIXER_GETLINECONTROLSF_ONEBYTYPE);
 
-	MIXERCONTROLDETAILS mcd = { 0 };
-	MIXERCONTROLDETAILS_UNSIGNED mcdu = { 0 };
+	MIXERCONTROLDETAILS mcd;
+	memset(&mcd, 0, sizeof(mcd));
+	MIXERCONTROLDETAILS_UNSIGNED mcdu;
+	memset(&mcdu, 0, sizeof(mcdu));
 
 	mcd.cbStruct = sizeof(MIXERCONTROLDETAILS);
 	mcd.hwndOwner = 0;
@@ -69,13 +74,16 @@ void BmxSetVolume(float volume)
 	HMIXER hMixer;
 	result = mixerOpen(&hMixer, MIXER_OBJECTF_MIXER, 0, 0, 0);
 
-	MIXERLINE ml = { 0 };
+	MIXERLINE ml;
+	memset(&ml, 0, sizeof(ml));
 	ml.cbStruct = sizeof(MIXERLINE);
 	ml.dwComponentType = MIXERLINE_COMPONENTTYPE_DST_SPEAKERS;
 	result = mixerGetLineInfo((HMIXEROBJ) hMixer, &ml, MIXER_GETLINEINFOF_COMPONENTTYPE);
 
-	MIXERLINECONTROLS mlc = { 0 };
-	MIXERCONTROL mc = { 0 };
+	MIXERLINECONTROLS mlc;
+	memset(&mlc,0,sizeof(mlc));
+	MIXERCONTROL mc;
+	memset(&mc,0,sizeof(mc));
 	mlc.cbStruct = sizeof(MIXERLINECONTROLS);
 	mlc.dwLineID = ml.dwLineID;
 	mlc.dwControlType = MIXERCONTROL_CONTROLTYPE_VOLUME;
@@ -84,8 +92,10 @@ void BmxSetVolume(float volume)
 	mlc.cbmxctrl = sizeof(MIXERCONTROL);
 	result = mixerGetLineControls((HMIXEROBJ) hMixer, &mlc, MIXER_GETLINECONTROLSF_ONEBYTYPE);
 
-	MIXERCONTROLDETAILS mcd = { 0 };
-	MIXERCONTROLDETAILS_UNSIGNED mcdu = { 0 };
+	MIXERCONTROLDETAILS mcd;
+	memset(&mcd, 0, sizeof(mcd));
+	MIXERCONTROLDETAILS_UNSIGNED mcdu;
+	memset(&mcdu, 0, sizeof(mcdu));
 
 	mcdu.dwValue = (DWORD) (volume * 65535.0f);
 
@@ -325,7 +335,7 @@ HBITMAP g_hBitmap;
 HDC g_hDC;
 void *g_pBits = NULL;
 
-int find_next_file(char *buffer, char *path, int maxlen, int step)
+int find_next_file(char *buffer, char *path, int, int step)
 {
 	char cwd[_MAX_PATH];
 	char path_buffer[_MAX_PATH];
@@ -457,10 +467,11 @@ void get_next_file(int step)
 	find_next_file(m_filename, m_filename, _MAX_PATH, step);
 }
 
-void OnLoad(HWND hWnd)
+void OnLoad(HWND)
 {
 	char szFile[MAX_PATH] = { 0 };
-	OPENFILENAME ofn = { 0 };
+	OPENFILENAME ofn;
+	memset(&ofn, 0, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.lpstrFilter = "Buzz Tracker (*.bmx;*.bmw)\0*.bmx;*.bmw\0All Files\0*.*\0\0";
 	ofn.nMaxFile = MAX_PATH;

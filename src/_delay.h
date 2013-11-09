@@ -48,6 +48,7 @@ typedef struct{
 //init procedure
 void *_delay_init(char *msd)
 {
+	(void)msd;
 	_delay_machine *m=(_delay_machine*)bmx_alloc(sizeof(_delay_machine));
 	m->buf=(float*)m->dbuf;
 	memset(m->buf,0,_delay_BUFFER*2*4);
@@ -58,6 +59,7 @@ void *_delay_init(char *msd)
 
 int _delay_tick(_delay_machine *m, _delay_gpar *gp, _delay_tpar *tp)
 {
+	(void)tp;
 	if (gp->length!=0xFF) m->length = gp->length/128.0f;
 	if (gp->wetout!=0xFF) m->wetout = gp->wetout/128.0f;
 	if (gp->dryout!=0xFF) m->dryout = gp->dryout/128.0f;
@@ -79,6 +81,7 @@ BOOL _delay_work(_delay_machine *m, float *psamples, int numsamples, int channel
 	float *p=psamples;
 	char pan = m->pan;
 	float *buf=m->buf;
+	(void)channels;
 
 	if (pan!=0) {
 		lbuf=m->buf; rbuf=m->buf+_delay_BUFFER;
@@ -126,12 +129,12 @@ BOOL _delay_work(_delay_machine *m, float *psamples, int numsamples, int channel
 #pragma pack(1)
 //machine info
 BmxMachineHeader _delay_header={
-  "_delay", //dllname
-  sizeof(_delay_gpar), //gpsize in bytes
-  0, //tpsize in bytes
-  2,  //channels (1-mono, 2-stereo)
-  (LPFINIT)&_delay_init,
-  (LPFTICK)&_delay_tick,
-  (LPFWORK)&_delay_work,
+	"_delay", //dllname
+	sizeof(_delay_gpar), //gpsize in bytes
+	0, //tpsize in bytes
+	2, //channels (1-mono, 2-stereo)
+	(LPFINIT)&_delay_init,
+	(LPFTICK)&_delay_tick,
+	(LPFWORK)&_delay_work
 };
 #pragma pack()
