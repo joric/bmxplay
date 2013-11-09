@@ -121,9 +121,4 @@ void *bmx_alloc(int bytes)
 	return malloc(bytes);
 }
 
-void bmx_free(void *p)
-{
-	if (p)
-		free(p);
-	p = 0;
-}
+#define bmx_free(p) { if (p) free(p); p=NULL; }
