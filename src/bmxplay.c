@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     res = BmxLoad(data);
     if (res != 0)
     {
-        printf("File \"%s\" has unsupported format (E%02d)\n", szName, res);
+        printf("File \"%s\" has unsupported format (error code %d)\n", szName, res);
         return res;
     }
 
