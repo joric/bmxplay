@@ -7,7 +7,7 @@
 float BmxPerfomance;		// required timeslice in %
 
 #ifdef _WIN32
-#include "waveout.h"
+#include "waveout_win32.h"
 #else
 #include <stdint.h>
 #define DWORD uint32_t
