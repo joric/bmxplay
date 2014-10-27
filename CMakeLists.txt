@@ -32,8 +32,8 @@ if (WIN32)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
 endif(WIN32)
 
-#set(buzz ${root}/bin)
-set(buzz D:/Projects/home/music/Buzz)
+set(buzz ${root}/bin)
+#set(buzz D:/Projects/home/music/Buzz)
 
 install(TARGETS ${generators} RUNTIME DESTINATION ${buzz}/gear/generators)
 install(TARGETS ${effects} RUNTIME DESTINATION ${buzz}/gear/effects)
