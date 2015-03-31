@@ -113,6 +113,8 @@ int BmxGetPos()
 {
 	MMTIME mmt;
 	mmt.wType = TIME_SAMPLES;
+	if (!audiodev)
+		return 0;
 	waveOutGetPosition(audiodev, &mmt, sizeof(mmt));
 	return (mmt.u.sample) % (BUFSIZE * NUMBUFS);
 }

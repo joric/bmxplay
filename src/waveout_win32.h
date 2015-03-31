@@ -62,6 +62,9 @@ int PlayThread()
 
 	waveOutOpen(&audiodev, WAVE_MAPPER, &waveformat, (unsigned int) bufferdone, 0, CALLBACK_FUNCTION);
 
+	if (!audiodev)
+		return 0;
+
 	musicevent = CreateEvent(NULL, FALSE, FALSE, "BmxPlayer");
 
 	for (i = 0; i < NUMBUFS; i++)
@@ -92,6 +95,9 @@ int PlayThread()
 			if ((waveheader[i].dwFlags & WHDR_DONE) && nextbuf == i)
 			{
 				int ticks_in, ticks_out;
+
+				if (!audiodev)
+					return 0;
 
 				waveOutUnprepareHeader(audiodev, &waveheader[i], sizeof(WAVEHDR));
 

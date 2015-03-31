@@ -146,7 +146,7 @@ CMachineInfo const MacInfo =
 	0,										// numGlobalParameters
 	1,										// numTrackParameters
 	pParameters,
-	1, 
+	1,
 	pAttributes,
 #ifdef _DEBUG
 	"bmxplay _xi (Debug build)",		// name
@@ -155,7 +155,7 @@ CMachineInfo const MacInfo =
 #endif
 	"_xi", // short name
 	"Joric", // author
-	"Import xi..."
+	"Import xi...\nExport xi..."
 };
 
 _xi_machine *me;
@@ -176,7 +176,9 @@ public:
 	virtual void Command(int const i);	
 	virtual void Save(CMachineDataOutput * const po);
 	void OnLoad();
+	void OnSave();
 	void OnImport(char *filename);
+	void OnExport(char *filename);
 	virtual void AttributesChanged();
 
 public:
@@ -247,6 +249,32 @@ void mi::Tick()
 bool mi::Work(float *psamples, int numsamples, int const)
 {	
 	return _xi_work(me,psamples,numsamples,1)!=0;
+}
+
+void mi::OnSave()
+{
+	TCHAR szDir[MAX_PATH] = TEXT("");
+	TCHAR szFile[MAX_PATH] = TEXT("");
+	strcpy(szFile,"*.xi");
+	GetCurrentDirectory(MAX_PATH,szDir);
+	OPENFILENAME   ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize         = sizeof(ofn);
+	ofn.hwndOwner           = NULL;
+	ofn.hInstance           = g_hInstance;
+	ofn.lpstrFilter         = "*.xi";
+	ofn.lpstrCustomFilter   = NULL;
+	ofn.lpstrFile           = szFile;
+	ofn.nMaxFile            = MAX_PATH;
+	ofn.lpstrInitialDir     = szDir;
+	ofn.lCustData           = 0;
+	if (GetSaveFileName(&ofn))
+		OnExport(ofn.lpstrFile);
+}
+
+void mi::OnExport(char *filename)
+{
+	MessageBox(NULL, "Not supported yet", "System message", MB_OK);
 }
 
 
@@ -354,7 +382,10 @@ void mi::Command(int const i)
 	::me=me;
 	::lpmi=this;
 
-	OnLoad();
+	if (i==0)
+		OnLoad();
+	else
+		OnSave();
 }
 
 void mi::AttributesChanged()
