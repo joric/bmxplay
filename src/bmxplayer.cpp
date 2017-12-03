@@ -27,6 +27,9 @@
 #include "bmxplay.h"
 #include <mmsystem.h>
 
+#include <shobjidl.h>
+ITaskbarList3* _taskbar;
+
 float BmxGetVolume()
 {
 	MMRESULT result;
@@ -861,6 +864,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				SetTitle(hWnd);
 
+				if (_taskbar) _taskbar->SetProgressValue(hWnd, BmxCurrentTick, (int) bmx.seq.songsize);
+
 				hdc = BeginPaint(hWnd, &ps);
 
 				Paint();
@@ -1152,6 +1157,19 @@ int main(int argc, char **argv)
 		     SWP_NOZORDER | SWP_NOACTIVATE);
 
 	m_oldVolume = BmxGetVolume();
+
+	// 'Progress'
+	CoInitialize(NULL);
+	HRESULT hr = CoCreateInstance(CLSID_TaskbarList, 0, CLSCTX_INPROC_SERVER, IID_ITaskbarList3, reinterpret_cast<void **> (&(_taskbar)));
+	if (SUCCEEDED(hr)) {
+		if (FAILED(_taskbar->HrInit())) {
+			_taskbar->Release();
+			_taskbar = NULL;
+		}
+	} else {
+		printf("[Win32TaskbarManager::init] Cannot create taskbar instance");
+	}
+
 
 //    m_filename[0] = 0;
 
