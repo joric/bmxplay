@@ -848,6 +848,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				case IDC_PAUSE:					
 					m_pause = !m_pause;
+					if (_taskbar) _taskbar->SetProgressState(hWnd, m_pause ? TBPF_PAUSED : TBPF_NORMAL);
 					if (m_pause)
 						BmxStop();
 					else
