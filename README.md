@@ -51,6 +51,31 @@ Size-optimized ADSR with loops, can be stored as 4-bit. Mostly ripped from Quad/
 * oh.xi - Open Hihat
 * sd.xi - Snare drum
 
+References
+----------
+
+#### Resonant filter
+
+See http://www.musicdsp.org/showone.php?id=29 (posted by Paul Kellett)
+
+This filter consists of two first order low-pass filters in
+series, with some of the difference between the two filter
+outputs fed back to give a resonant peak.
+
+You can use more filter stages for a steeper cutoff but the
+stability criteria get more complicated if the extra stages
+are within the feedback loop.
+
+```
+//set feedback amount given f and q between 0 and 1
+fb = q + q/(1.0 - f);
+
+//for each sample...
+buf0 = buf0 + f * (in - buf0 + fb * (buf0 - buf1));
+buf1 = buf1 + f * (buf0 - buf1);
+out = buf1;
+```
+
 [1]: http://pouet.net/prod.php?which=7468
 [2]: https://github.com/joric/flashbmxplay
 [3]: https://github.com/joric/bmxplayjs
