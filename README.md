@@ -27,7 +27,7 @@ Just one base signal (sawtooth). Has a period slide feature, uses a slide note a
 XI samples loader and player. Only one track and one sample per machine.
 Supports envelopes, loops, can store wave data as 4-bit PCM to save some space.
 
-* **_voice** (mono, voice synth, based on 2-formant speech synth by Frank Baumgartner).
+* **_voice** (mono, voice synth, based on 2-formant speech synth by [Frank Baumgartner][5]).
 Not finished, currently more like a PoC. Tries to be small (that's why only 2 formants).
 
 Effects
@@ -80,3 +80,4 @@ out = buf1;
 [2]: https://github.com/joric/flashbmxplay
 [3]: https://github.com/joric/bmxplayjs
 [4]: http://www.musicdsp.org/showone.php?id=29
+[5]: http://www.active-web.cc/html/research/
