@@ -8,6 +8,12 @@ of porting everything to assembly. Uses its own C++ classes implementation in pl
 Used to patch virtual methods table in order to comply with various versions of Buzz.
 If you want conventional or "modern" OOP, check out [flashbmxplay][2] or [bmxplayjs][3].
 
+Demo
+----
+
+http://bmxplay.sourceforge.net
+
+
 License
 -------
 
