@@ -30,6 +30,37 @@
 #include <shobjidl.h>
 ITaskbarList3* _taskbar;
 
+//#define USE_ACRYLIC
+
+#ifdef USE_ACRYLIC
+struct ACCENTPOLICY
+{
+	int nAccentState;
+	int nFlags;
+	int nColor;
+	int nAnimationId;
+};
+
+struct WINCOMATTRPDATA {
+	int nAttribute;
+	PVOID pData;
+	ULONG ulDataSize;
+};
+
+enum WINCOMPATTR {
+	WCA_ACCENT_POLICY = 19
+};
+
+enum ACCENTTYPES {
+	ACCENT_DISABLE = 0,
+	ACCENT_ENABLE_GRADIENT = 1,
+	ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
+	ACCENT_ENABLE_BLURBEHIND = 3,
+	ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
+	ACCENT_INVALID_STATE = 5
+};
+#endif
+
 float BmxGetVolume()
 {
 	MMRESULT result;
@@ -1187,6 +1218,27 @@ int main(int argc, char **argv)
 	else
 		OnLoad(hWnd);
 
+#ifdef USE_ACRYLIC
+	DWORD color = GetSysColor(COLOR_ACTIVECAPTION);
+	int b = (color>>16) & 0xff, r = (color>>8) & 0xff, g = color & 0xff, a = 0x80;
+	const HINSTANCE hModule = LoadLibrary(TEXT("user32.dll"));
+	if (hModule) {
+		typedef BOOL(WINAPI* pSetWindowCompositionAttribute)(HWND, WINCOMATTRPDATA*);
+		const pSetWindowCompositionAttribute SetWindowCompositionAttribute = (pSetWindowCompositionAttribute)GetProcAddress(hModule, "SetWindowCompositionAttribute");
+		if (SetWindowCompositionAttribute) {
+			ACCENTPOLICY policy;
+			policy.nAccentState = ACCENT_ENABLE_ACRYLICBLURBEHIND;
+			policy.nColor = (a<<24) | (b<<16) | (g<<8) | r;
+			policy.nFlags = 0;
+			WINCOMATTRPDATA data;
+			data.nAttribute = WCA_ACCENT_POLICY;
+			data.ulDataSize = sizeof(policy);
+			data.pData = &policy;
+			SetWindowCompositionAttribute(hWnd, &data);
+		}
+		FreeLibrary(hModule);
+	}
+#else
 	// 'Aero'
 	if (HINSTANCE hDLL = LoadLibrary("dwmapi"))
 	{
@@ -1195,6 +1247,7 @@ int main(int argc, char **argv)
 		fn pfn = (fn) GetProcAddress(hDLL, "DwmExtendFrameIntoClientArea");
 		pfn(hWnd, p);
 	}
+#endif
 
 	ShowWindow(hWnd, true);
 	SetTimer(hWnd, 0, 20, NULL);
