@@ -1219,16 +1219,23 @@ int main(int argc, char **argv)
 		OnLoad(hWnd);
 
 #ifdef USE_ACRYLIC
-	DWORD color = GetSysColor(COLOR_ACTIVECAPTION);
-	int b = (color>>16) & 0xff, r = (color>>8) & 0xff, g = color & 0xff, a = 0x80;
 	const HINSTANCE hModule = LoadLibrary(TEXT("user32.dll"));
 	if (hModule) {
 		typedef BOOL(WINAPI* pSetWindowCompositionAttribute)(HWND, WINCOMATTRPDATA*);
 		const pSetWindowCompositionAttribute SetWindowCompositionAttribute = (pSetWindowCompositionAttribute)GetProcAddress(hModule, "SetWindowCompositionAttribute");
 		if (SetWindowCompositionAttribute) {
+			DWORD color = 0x80ffffff;
+
+			if (HINSTANCE hDLL = LoadLibrary("dwmapi")) {
+				typedef HRESULT(__stdcall * fn) (DWORD *, BOOL *);
+				fn pfn = (fn) GetProcAddress(hDLL, "DwmGetColorizationColor");
+				BOOL opaque = FALSE;
+				pfn(&color, &opaque);
+			}
+
 			ACCENTPOLICY policy;
 			policy.nAccentState = ACCENT_ENABLE_ACRYLICBLURBEHIND;
-			policy.nColor = (a<<24) | (b<<16) | (g<<8) | r;
+			policy.nColor = (color & 0xff00ff00) | ((color & 0xff) << 16) | ((color >> 16) & 0xff);
 			policy.nFlags = 0;
 			WINCOMATTRPDATA data;
 			data.nAttribute = WCA_ACCENT_POLICY;
