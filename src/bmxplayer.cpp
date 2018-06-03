@@ -1219,41 +1219,31 @@ int main(int argc, char **argv)
 		OnLoad(hWnd);
 
 #ifdef USE_ACRYLIC
-	const HINSTANCE hModule = LoadLibrary(TEXT("user32.dll"));
-	if (hModule) {
-		typedef BOOL(WINAPI* pSetWindowCompositionAttribute)(HWND, WINCOMATTRPDATA*);
-		const pSetWindowCompositionAttribute SetWindowCompositionAttribute = (pSetWindowCompositionAttribute)GetProcAddress(hModule, "SetWindowCompositionAttribute");
-		if (SetWindowCompositionAttribute) {
-			DWORD color = 0x80ffffff;
+	DWORD color = 0x80ffffff;
+	BOOL opaque = FALSE;
 
-			if (HINSTANCE hDLL = LoadLibrary("dwmapi")) {
-				typedef HRESULT(__stdcall * fn) (DWORD *, BOOL *);
-				fn pfn = (fn) GetProcAddress(hDLL, "DwmGetColorizationColor");
-				BOOL opaque = FALSE;
-				pfn(&color, &opaque);
-			}
-
-			ACCENTPOLICY policy;
-			policy.nAccentState = ACCENT_ENABLE_ACRYLICBLURBEHIND;
-			policy.nColor = (color & 0xff00ff00) | ((color & 0xff) << 16) | ((color >> 16) & 0xff);
-			policy.nFlags = 0;
-			WINCOMATTRPDATA data;
-			data.nAttribute = WCA_ACCENT_POLICY;
-			data.ulDataSize = sizeof(policy);
-			data.pData = &policy;
-			SetWindowCompositionAttribute(hWnd, &data);
-		}
-		FreeLibrary(hModule);
-	}
-#else
-	// 'Aero'
 	if (HINSTANCE hDLL = LoadLibrary("dwmapi"))
-	{
-		typedef HRESULT(__stdcall * fn) (HWND, const int *);
-		int p[4] = { -1 };
-		fn pfn = (fn) GetProcAddress(hDLL, "DwmExtendFrameIntoClientArea");
-		pfn(hWnd, p);
-	}
+		if (FARPROC pfn = GetProcAddress(hDLL, "DwmGetColorizationColor"))
+			((HRESULT(__stdcall *)(DWORD *, BOOL *))pfn)(&color, &opaque);
+
+	ACCENTPOLICY policy;
+	policy.nAccentState = ACCENT_ENABLE_ACRYLICBLURBEHIND;
+	policy.nColor = (color & 0xff00ff00) | ((color & 0xff) << 16) | ((color >> 16) & 0xff);
+	policy.nFlags = 0;
+	WINCOMATTRPDATA data;
+	data.nAttribute = WCA_ACCENT_POLICY;
+	data.ulDataSize = sizeof(policy);
+	data.pData = &policy;
+
+	if (HINSTANCE hDLL = LoadLibrary("user32"))
+		if (FARPROC pfn = GetProcAddress(hDLL, "SetWindowCompositionAttribute"))
+			((BOOL(WINAPI*)(HWND, WINCOMATTRPDATA*))pfn)(hWnd, &data);
+
+#else // aero
+	int p[4] = { -1 };
+	if (HINSTANCE hDLL = LoadLibrary("dwmapi"))
+		if (FARPROC pfn = GetProcAddress(hDLL, "DwmExtendFrameIntoClientArea"))
+			((HRESULT(__stdcall *)(HWND, const int *))pfn)(hWnd, p);
 #endif
 
 	ShowWindow(hWnd, true);
