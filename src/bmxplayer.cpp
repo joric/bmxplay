@@ -1150,13 +1150,16 @@ int main(int argc, char **argv)
 	WNDCLASS wc;
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 
+	HICON hIcon, hIconSm;
+	ExtractIconEx("SndVol.exe", 0, &hIcon, &hIconSm, 1);
+
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
 	wc.lpfnWndProc = (WNDPROC) WndProc;
 	wc.hInstance = hInstance;
 	wc.hbrBackground = NULL;
 	wc.lpszClassName = "Bmxplayer";
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wc.hIcon = hIconSm;
 	wc.lpszMenuName = NULL;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
@@ -1171,6 +1174,8 @@ int main(int argc, char **argv)
 	if (!(hWnd = CreateWindow(wc.lpszClassName, wc.lpszClassName,
 			pAcrylic ? WS_POPUPWINDOW : WS_OVERLAPPEDWINDOW, 0, 0, w, h, NULL, NULL, wc.hInstance, NULL)))
 		return FALSE;
+
+	SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM) hIcon);
 
 	RECT rc;
 
