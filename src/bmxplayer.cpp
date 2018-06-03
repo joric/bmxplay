@@ -30,9 +30,6 @@
 #include <shobjidl.h>
 ITaskbarList3* _taskbar;
 
-//#define USE_ACRYLIC
-
-#ifdef USE_ACRYLIC
 struct ACCENTPOLICY
 {
 	int nAccentState;
@@ -59,7 +56,6 @@ enum ACCENTTYPES {
 	ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
 	ACCENT_INVALID_STATE = 5
 };
-#endif
 
 float BmxGetVolume()
 {
@@ -1170,10 +1166,10 @@ int main(int argc, char **argv)
 	int w = BMP_WIDTH;
 	int h = BMP_HEIGHT;
 
-	if (!
-	    (hWnd =
-	     CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW | WS_POPUPWINDOW | WS_CAPTION | WS_MINIMIZEBOX,
-			  0, 0, w, h, NULL, NULL, wc.hInstance, NULL)))
+	FARPROC pAcrylic = GetProcAddress(LoadLibrary("user32"), "SetWindowCompositionAttribute");
+
+	if (!(hWnd = CreateWindow(wc.lpszClassName, wc.lpszClassName,
+			pAcrylic ? WS_POPUPWINDOW : WS_OVERLAPPEDWINDOW, 0, 0, w, h, NULL, NULL, wc.hInstance, NULL)))
 		return FALSE;
 
 	RECT rc;
@@ -1202,9 +1198,6 @@ int main(int argc, char **argv)
 		printf("[Win32TaskbarManager::init] Cannot create taskbar instance");
 	}
 
-
-//    m_filename[0] = 0;
-
 	if (argc <= 1)
 		find_next_file(m_filename, NULL, _MAX_PATH, 0);
 	else
@@ -1218,33 +1211,26 @@ int main(int argc, char **argv)
 	else
 		OnLoad(hWnd);
 
-#ifdef USE_ACRYLIC
-	DWORD color = 0x80ffffff;
-	BOOL opaque = FALSE;
 
-	if (HINSTANCE hDLL = LoadLibrary("dwmapi"))
-		if (FARPROC pfn = GetProcAddress(hDLL, "DwmGetColorizationColor"))
-			((HRESULT(__stdcall *)(DWORD *, BOOL *))pfn)(&color, &opaque);
+	if (pAcrylic) {
+		DWORD color = 0x00ffffff;
+		BOOL opaque = FALSE;
+		//if (HINSTANCE hDLL = LoadLibrary("dwmapi")) if (FARPROC pfn = GetProcAddress(hDLL, "DwmGetColorizationColor")) ((HRESULT(__stdcall *)(DWORD *, BOOL *))pfn)(&color, &opaque);
 
-	ACCENTPOLICY policy;
-	policy.nAccentState = ACCENT_ENABLE_ACRYLICBLURBEHIND;
-	policy.nColor = (color & 0xff00ff00) | ((color & 0xff) << 16) | ((color >> 16) & 0xff);
-	policy.nFlags = 0;
-	WINCOMATTRPDATA data;
-	data.nAttribute = WCA_ACCENT_POLICY;
-	data.ulDataSize = sizeof(policy);
-	data.pData = &policy;
+		ACCENTPOLICY policy;
+		policy.nAccentState = ACCENT_ENABLE_ACRYLICBLURBEHIND;
+		policy.nColor = (color & 0xff00ff00) | ((color & 0xff) << 16) | ((color >> 16) & 0xff);
+		policy.nFlags = 0;
+		WINCOMATTRPDATA data;
+		data.nAttribute = WCA_ACCENT_POLICY;
+		data.ulDataSize = sizeof(policy);
+		data.pData = &policy;
+		((BOOL(WINAPI*)(HWND, WINCOMATTRPDATA*))pAcrylic)(hWnd, &data);
+	} else {
+		int p[4] = { -1 };
+		if (HINSTANCE hDLL = LoadLibrary("dwmapi")) if (FARPROC pAero = GetProcAddress(hDLL, "DwmExtendFrameIntoClientArea")) ((HRESULT(__stdcall *)(HWND, const int *))pAero)(hWnd, p);
+	}
 
-	if (HINSTANCE hDLL = LoadLibrary("user32"))
-		if (FARPROC pfn = GetProcAddress(hDLL, "SetWindowCompositionAttribute"))
-			((BOOL(WINAPI*)(HWND, WINCOMATTRPDATA*))pfn)(hWnd, &data);
-
-#else // aero
-	int p[4] = { -1 };
-	if (HINSTANCE hDLL = LoadLibrary("dwmapi"))
-		if (FARPROC pfn = GetProcAddress(hDLL, "DwmExtendFrameIntoClientArea"))
-			((HRESULT(__stdcall *)(HWND, const int *))pfn)(hWnd, p);
-#endif
 
 	ShowWindow(hWnd, true);
 	SetTimer(hWnd, 0, 20, NULL);
