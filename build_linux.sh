@@ -1,0 +1,1 @@
+gcc -Os -s -ffunction-sections -fdata-sections src/bmxplay.c -o bmxplay -lm -lpthread

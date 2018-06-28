@@ -76,7 +76,7 @@ void * _xi_init(char *msd)
 	if (msd!=NULL)
 	{
 		memcpy(&m->s, msd+4, sizeof(_xi_sample));
-		m->s.stream=(unsigned char*)(msd+4+sizeof(_xi_sample));
+		m->s.stream=(unsigned char*)(msd+4+sizeof(_xi_sample) - 8*(sizeof(void*) - 4));
 
 		size=m->s.samplelength;
 
@@ -197,7 +197,7 @@ BOOL _xi_work(_xi_machine *m, float *psamples, int numsamples, int channels)
 		if (index < length && t->play)
 		{
 			a1=s[index]; a2=s[index+1];
-			a = (a1<<8) + (a2-a1) * (t->sn & 0x000000FF);
+			a = a1*256 + (a2-a1) * (t->sn & 0x000000FF);
 
 
 			if (type!=0)
