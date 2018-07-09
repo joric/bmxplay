@@ -76,7 +76,8 @@ void * _xi_init(char *msd)
 	if (msd!=NULL)
 	{
 		memcpy(&m->s, msd+4, sizeof(_xi_sample));
-		m->s.stream=(unsigned char*)(msd+4+sizeof(_xi_sample));
+		//m->s.stream=(unsigned char*)(msd+4+sizeof(_xi_sample));
+		m->s.stream=(unsigned char*)(msd+4+sizeof(_xi_sample) - 8*(sizeof(void*) - 4));
 
 		size=m->s.samplelength;
 

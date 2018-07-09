@@ -13,6 +13,9 @@ float BmxPerfomance;		// required timeslice in %
 #define DWORD uint32_t
 #define WORD uint16_t
 #define byte uint8_t
+#define BOOL char
+#define TRUE 1
+#define FALSE 0
 #include "waveout_linux.h"
 #endif
 
