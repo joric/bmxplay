@@ -48,14 +48,14 @@ A stereophonic delay (X-delay, ping-pong echo, etc.). Stereo filter that ties ev
 Samples
 -------
 
-Size-optimized ADSR with loops, can be stored as 4-bit. Mostly ripped from Quad/Theta (Wired 1998).
+Size-optimized ADSR with loops, can be stored as 4-bit (2 times smaller). Mostly ripped from Quad/Theta (Wired 1998).
 
-* bd.xi - Bass drum
-* cc.xi - Crash cymbal (this is the longest one and masterfully looped)
-* ch.xi - Closed Hihat
-* cp.xi - Clap
-* oh.xi - Open Hihat
-* sd.xi - Snare drum
+* bd.xi (5344 bytes) - Bass drum
+* cc.xi (6672 bytes) - Crash cymbal (this is the longest one and masterfully looped)
+* ch.xi (2323 bytes) - Closed Hihat
+* cp.xi (1924 bytes) - Clap
+* oh.xi (3950 bytes) - Open Hihat
+* sd.xi (3737 bytes) - Snare drum
 
 References
 ----------
