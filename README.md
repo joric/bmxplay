@@ -84,7 +84,7 @@ out = buf1;
 
 ### Speech synthesizer
 
-Based on the 2-formant speech synth by [Frank Baumgartner][5], published in Hugi magazine (example below).
+Based on the 2-formant speech synth from the Dialogos 2001 [4K intro](https://demozoo.org/productions/39656/) by [Frank Baumgartner][5], published in Hugi magazine (example below).
 Older versions included 6-formant Klatt synth ([klatt-3.04](http://bmxplay.sourceforge.net/files/klatt.3.04.tar.gz)) used by Stephen Hawking since mid-80s,
 but it was considered too large.
 
