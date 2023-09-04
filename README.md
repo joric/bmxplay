@@ -9,11 +9,12 @@ If you want conventional or "modern" OOP, check out [flashbmxplay][2] or [bmxpla
 
 ## Demo
 
-Online demo: https://joric.github.io/bmxplayjs
+* Online demo: https://joric.github.io/bmxplayjs
 
 ## Downloads
 
-Download latest binary release from the [releases section](https://github.com/joric/bmxplay/releases).
+* Download latest binary release from the [releases section](https://github.com/joric/bmxplay/releases).
+* See https://bmxplay.sourceforge.net for older releases.
 
 ## License
 
